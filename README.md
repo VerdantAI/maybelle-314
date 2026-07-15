@@ -2,6 +2,10 @@
 
 Maybelle 314 is a planned Raspberry Pi 5 performance controller for a Eurorack system. It is intended to behave like a classical MIDI/CV controller with stored sequences: it follows the rack clock, reads authored sequence data, and emits control voltage, gates, triggers, and modulation through an Expert Sleepers ES-9. The Pi is not the rack voice and is not a sampler.
 
+## Development Approach
+
+This software is being developed with the active use of coding agents. Agents are used to help research platform choices, maintain OpenSpec planning artifacts, draft implementation work, edit code, run validation commands, and prepare commits. Human review remains part of the workflow, especially for hardware assumptions, music licensing, runtime safety, and production decisions.
+
 ## Current Direction
 
 - Target hardware: Raspberry Pi 5, Expert Sleepers ES-9, 5-inch display, Eurorack control sources.
