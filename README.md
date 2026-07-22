@@ -8,7 +8,7 @@ This software is being developed with the active use of coding agents. Agents ar
 
 ## Current Direction
 
-- Target hardware: Raspberry Pi 5, Expert Sleepers ES-9, 5-inch display, Eurorack control sources.
+- Target hardware: Raspberry Pi 5, Expert Sleepers ES-9, official Raspberry Pi Touch Display 2 (5-inch, 720x1280 portrait, DSI, 5-finger capacitive), Eurorack control sources.
 - Master clock: Pamela's Pro Workout. The Pi follows external clock/start/reset signals rather than owning tempo.
 - Authoring workflow: tracks are authored in a DAW on another computer and loaded onto the Pi, likely as song bundles containing MIDI files plus metadata. Ardour and Bitwig Studio are both supported authoring tools; Bitwig is the current test bench while Ardour support is deliberately retained. Bitwig's MIDI export carries notes and velocity only (no automation, CC, or note expressions), which shapes how modulation is authored — see the modulation/LFO approach below.
 - Companion content tooling: an offline, authoring-side toolset (separate from the Pi runtime) for creating tempo-synced LFO/modulation waveforms — Adventure Kid AKWF-style single-cycle shapes or multi-bar bounces of DAW automation — and for preparing Rossum Assimil8or presets. The LFO's shape is baked into a waveform stored in the sampler; its trigger timing is authored as a plain note in the MIDI file, which Maybelle emits as a gate/trigger through the ES-9 into the sampler's trig-in. The tooling points to the external A8Manager configurator (credit: Chris Roberts) for hands-on editing and includes a clean-room preset writer for generated content, keeping licensing MIT-compatible.
