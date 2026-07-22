@@ -1,6 +1,6 @@
 ## Context
 
-Maybelle 314 currently has one base-platform decision change and seven supporting research tracks. Some research can start immediately with web searches and source review. Other work is blocked on hardware access, bench testing, a DAW host machine, artist/license outreach, or unavailable deferred hardware such as Assimil8or.
+Maybelle 314 currently has one base-platform decision change and nine supporting research tracks. Some research can start immediately with web searches and source review. Other work is blocked on hardware access, bench testing, a DAW host machine, artist/license outreach, or unavailable deferred hardware such as Assimil8or.
 
 The roadmap needs to preserve momentum without pretending all research has the same urgency. The base-platform decision is the architectural center: it should receive early evidence from DAW interchange, Pi/ES-9 port topology, ES-9 profile validation, and package/runtime research. Agent control surface, open test fixtures, and live trigger routing are important, but they mostly refine tooling, testing, and future feature boundaries after the first platform constraints are known.
 
@@ -28,8 +28,8 @@ Research SHALL be grouped into three bands:
 | Band | Meaning | Research Efforts |
 | --- | --- | --- |
 | P0 | Blocks or strongly shapes the base-platform decision | `decide-base-platform`, `research-daw-interchange-options`, `investigate-pi-port-topology`, `investigate-es9-config-profiles` |
-| P1 | Should begin early because it improves validation and tooling, but does not block first hardware/runtime choice | `research-open-test-music-fixtures`, `investigate-agent-control-surface` |
-| P2 | Important product-shape exploration that should not block first stored-sequence controller decisions | `research-live-trigger-sample-routing`, `research-synced-lfo-sampler-authoring` |
+| P1 | Should begin early because it improves validation and tooling, but does not block first hardware/runtime choice | `research-open-test-music-fixtures`, `investigate-agent-control-surface`, `research-touchscreen-emulation-and-ux` |
+| P2 | Important product-shape exploration that should not block first stored-sequence controller decisions | `research-live-trigger-sample-routing`, `research-synced-lfo-sampler-authoring`, `research-bluetooth-control-channel` |
 
 Rationale: the Pi/ES-9/DAW path determines whether the core product can run. Test fixtures and agent tooling accelerate the work once that path is clearer. Live trigger/sample routing can expand the product, but it should not dilute the controller-first platform decision.
 
@@ -53,6 +53,8 @@ Web-first items:
 | `investigate-agent-control-surface` | Yes | CLI/schema/MCP/skill best practices, dry-run and JSON-output patterns |
 | `research-live-trigger-sample-routing` | Yes | live SFX/show-control/VJ/lighting software surface, protocols, cue systems, sample-trigger precedents |
 | `research-synced-lfo-sampler-authoring` | Yes | single-cycle/AKWF waveform specs and licensing, Assimil8or preset format and clock-sync behavior, Assimil8or configurator licensing (A8Manager et al.) |
+| `research-touchscreen-emulation-and-ux` | Yes | 5-inch panel specs (DSI/HDMI, 800x480), QEMU Pi 5 emulation status, browser/kiosk touch emulation (Chromium kiosk, DevTools device mode), UI/UX patterns for small touch displays |
+| `research-bluetooth-control-channel` | Yes | Pi 5 BlueZ/BLE GATT capabilities, BLE event-trigger patterns, BLE throughput for updates, pairing/passkey (PIN) authentication and its weaknesses |
 
 Rationale: this lets agents make progress immediately and narrows the hardware questions before bench time.
 
@@ -70,7 +72,7 @@ Blocking channels:
 | --- | --- | --- |
 | Official docs/web | All efforts | First pass for product specs, protocols, package licenses, examples, and support statements |
 | Open-source/source review | DAW interchange, ES-9 profiles, agent tooling, fixtures | Needed when docs omit formats, CLI behavior, schemas, or license details |
-| Hardware bench: Pi 5 + ES-9 | Base platform, port topology, ES-9 I/O, ES-9 profiles | Needed for actual USB/audio/MIDI discovery, latency, channel mapping, and power behavior |
+| Hardware bench: Pi 5 + ES-9 | Base platform, port topology, ES-9 I/O, ES-9 profiles, touchscreen panel validation, Bluetooth pairing/throughput bench | Needed for actual USB/audio/MIDI discovery, latency, channel mapping, power behavior; plus panel contrast/touch/latency and BLE pairing/throughput, which emulation and web research cannot confirm |
 | DAW host testing | DAW interchange, fixtures | Needed to export known Ardour sessions and compare MIDI/stem/session outputs |
 | License review/outreach | Open test fixtures, synced-LFO sampler authoring | Needed before third-party music/session fixtures are committed or redistributed, and to resolve waveform (AKWF CC-BY/CC0) and configurator (all-rights-reserved) licensing |
 | Live show domain research | Live trigger routing | Needed to compare SFX, VJ, lighting, show-control, OSC/MIDI/DMX/timecode practices |
@@ -89,9 +91,9 @@ The initial schedule SHALL use four passes:
 | Pass | Focus | Efforts | Blocking Channel |
 | --- | --- | --- | --- |
 | Pass 1: Web triage | Gather public evidence and narrow unknowns | `research-daw-interchange-options`, `investigate-es9-config-profiles`, `investigate-pi-port-topology`, `decide-base-platform` package/license survey | Web/docs/source review |
-| Pass 2: Test and tooling support | Prepare validation inputs and agent workflow assumptions | `research-open-test-music-fixtures`, `investigate-agent-control-surface`, `research-synced-lfo-sampler-authoring` (licensing/format web triage) | Web/docs/source review, license review |
-| Pass 3: Hardware and DAW bench | Validate the architecture-critical assumptions | `investigate-pi-port-topology`, `investigate-es9-config-profiles`, `research-daw-interchange-options`, `decide-base-platform` | Pi 5, ES-9, DAW host, MIDI controllers if available |
-| Pass 4: Product expansion research | Explore future live cue/sample/show-control workflows | `research-live-trigger-sample-routing`, `research-synced-lfo-sampler-authoring` | Web/domain research first, later hardware/software integration if prioritized |
+| Pass 2: Test and tooling support | Prepare validation inputs and agent workflow assumptions | `research-open-test-music-fixtures`, `investigate-agent-control-surface`, `research-touchscreen-emulation-and-ux`, `research-synced-lfo-sampler-authoring` (licensing/format web triage) | Web/docs/source review, license review |
+| Pass 3: Hardware and DAW bench | Validate the architecture-critical assumptions | `investigate-pi-port-topology`, `investigate-es9-config-profiles`, `research-daw-interchange-options`, `research-touchscreen-emulation-and-ux` (panel validation), `decide-base-platform` | Pi 5, ES-9, DAW host, 5-inch panel, MIDI controllers if available |
+| Pass 4: Product expansion research | Explore future live cue/sample/show-control workflows | `research-live-trigger-sample-routing`, `research-synced-lfo-sampler-authoring`, `research-bluetooth-control-channel` | Web/domain research first, later hardware/software integration if prioritized |
 
 Pass 1 should produce enough evidence to decide what must be measured on hardware. Pass 3 should produce enough evidence to finalize or revise the base platform decision.
 
@@ -106,6 +108,7 @@ Required inputs before the decision:
 - Pi/ES-9 port and power topology recommendation.
 - ES-9 I/O/config validation recommendation.
 - Known test fixture strategy, even if only synthetic fixtures are available initially.
+- Kiosk/display approach and UI-framework direction, including how the 5-inch touchscreen is emulated for development.
 
 Rationale: picking Python, Node, or Tauri without ES-9 I/O and DAW interchange evidence would be premature.
 
