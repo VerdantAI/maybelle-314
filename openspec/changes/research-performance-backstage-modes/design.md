@@ -67,9 +67,19 @@ Rationale: the rack instrument cannot depend on a laptop being present; this mir
 ### Surface responsibilities and the manifest
 
 - **Performance (Pi touchscreen):** glanceable status, manual override, panic — reflects CV-driven state.
-- **Backstage (laptop, standard size):** the full editor for the song-bundle manifest — triggers, channel→ES-9 maps, banks, calibration, CV-selection/debounce — plus live monitoring when connected.
+- **Backstage (laptop, standard size):** the full editor for the song-bundle manifest — triggers, channel→ES-9 maps, banks, calibration, CV-selection/debounce — plus live monitoring when connected, and **easily-accessible authoring help and diagrams** (see below).
 - **Bluetooth/phone (`research-bluetooth-control-channel`):** a lightweight subset of Backstage for at-venue quick config, not the full editor.
 All three read/write the same shared song-bundle manifest model; Backstage is its primary editor.
+
+### Backstage surfaces authoring help and diagrams in-app
+
+Backstage includes helpful, easy-to-access diagrams and guidance answering common authoring/setup questions in context — e.g. the MIDI→CV model (one note = pitch + gate + velocity, split into wires by Maybelle, not the DAW), the ES-9 output map (which jack carries what), and how to set up tracks in Bitwig/Ardour. The content comes from the maintained authoring docs (`docs/authoring/`), surfaced as visual, in-app diagrams rather than requiring the user to leave the tool.
+
+Rationale: Backstage is where configuration happens, so it is where a user (or an assisting agent) most needs "how do I wire this / set up my DAW" answers; keeping one source of truth (`docs/authoring/`) rendered in-app avoids drift between the docs and the UI help.
+
+Alternatives considered:
+- External docs only: fine for agents, but forces the operator out of the tool mid-config.
+- Hard-coded help text in the UI: quick, but drifts from the authoring docs; prefer rendering the shared docs/diagrams.
 
 ## Risks / Trade-offs
 

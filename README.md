@@ -40,6 +40,10 @@ The current bias is toward a Python-centered runtime with a browser/kiosk UI, bu
 - Should the first image use Raspberry Pi OS Desktop for speed of validation, Lite for appliance behavior, or a custom image after the stack is proven?
 - Which runtime CV parameters are required for the first performance workflow?
 
+## Documentation
+
+- `docs/authoring/` — authoring guide for setting up Bitwig/Ardour tracks for the ES-9 via Maybelle, written for both users and assisting agents. Start at `docs/authoring/README.md`. Backstage mode surfaces this same guidance as in-app diagrams.
+
 ## Planning Artifacts
 
 - `openspec/changes/decide-base-platform/` — active base-platform decision (OS image, ES-9 I/O stack, runtime language, song-bundle format).

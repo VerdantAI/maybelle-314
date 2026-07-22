@@ -34,6 +34,14 @@ The project SHALL define each surface's responsibilities and their mapping to th
 - **AND** it maps all three to a single shared song-bundle manifest model and identifies shared versus surface-specific logic
 - **AND** it reconciles with `research-touchscreen-emulation-and-ux` and `research-bluetooth-control-channel`
 
+### Requirement: In-app authoring help and diagrams
+Backstage SHALL provide helpful, easy-to-access diagrams and guidance for common authoring/setup questions, sourced from the maintained authoring docs.
+
+#### Scenario: Setup help is available in Backstage
+- **WHEN** a user is configuring in Backstage
+- **THEN** Backstage surfaces accessible diagrams/guidance for common questions (the MIDI→CV model, the ES-9 output map, and how to set up tracks in Bitwig/Ardour)
+- **AND** the content is sourced from the maintained authoring docs (`docs/authoring/`) so the in-app help and the documentation share one source of truth
+
 ### Requirement: Decision evidence handoff
 The project SHALL produce evidence consumable by the base-platform and manifest decisions.
 

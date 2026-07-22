@@ -17,6 +17,7 @@
 - [x] 3.1 Define the responsibilities of Performance (touchscreen), Backstage (laptop), and the Bluetooth/phone subset.
 - [x] 3.2 Map each surface to the shared song-bundle manifest and identify shared vs surface-specific logic.
 - [x] 3.3 Reconcile with `research-touchscreen-emulation-and-ux` and `research-bluetooth-control-channel` so the three surfaces form one coherent model.
+- [x] 3.4 Define that Backstage surfaces accessible authoring help/diagrams (MIDI→CV model, ES-9 output map, Bitwig/Ardour setup) sourced from `docs/authoring/`.
 
 ## 4. Decision Handoff
 
