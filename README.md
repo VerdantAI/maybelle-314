@@ -29,7 +29,7 @@ The active OpenSpec change is `decide-base-platform`. It exists to decide:
 - Song bundle and manifest format (now specified in `decide-song-bundle-manifest`).
 - Kiosk/display approach for the 5-inch screen.
 
-The current bias is toward a Python-centered runtime with a browser/kiosk UI, but the ES-9 I/O spike is expected to drive the real decision.
+The decision is now recorded in `openspec/changes/decide-base-platform/decision-record.md`: a **Python core + local web/kiosk UI (Chromium) on Raspberry Pi OS Bookworm**, with the **ES-9 as a class-compliant USB audio device** (PortAudio/`sounddevice` or ALSA), a **FastAPI local server + SSE** for the Performance/Backstage web surfaces, and **file-based song bundles**. The recommendation is final for language, UI, persistence, OS, and dependencies; the **ES-9 I/O timing bench remains the gating spike** that finalizes the I/O layer (with a Rust/C timing-core fallback if Python timing proves insufficient).
 
 ## Open Questions
 
