@@ -6,12 +6,12 @@
 - [ ] 1.4 Research major DAW export capabilities for Ableton Live, Bitwig Studio, Studio One, Logic Pro, Reaper, and other relevant authoring tools.
 - [ ] 1.5 Research hardware sequencers/modules that import MIDI files, play SD-card projects, record CV/gate, or bridge DAW workflows into Eurorack.
 
-## 2. Ardour Export Spike
+## 2. DAW Export Spike
 
-- [ ] 2.1 Create a minimal Ardour test session with notes, CC automation, pitch bend, markers, tempo changes, time-signature changes, and named tracks.
-- [ ] 2.2 Export MIDI and stem artifacts from the Ardour session.
-- [ ] 2.3 Inspect exported artifacts and record which event types and metadata are preserved.
-- [ ] 2.4 Compare exported artifacts against Maybelle runtime needs for clock-following MIDI/CV playback.
+- [ ] 2.1 Create minimal Ardour and Bitwig test sessions with notes, velocity, CC automation, pitch bend, markers, tempo changes, time-signature changes, and named tracks.
+- [ ] 2.2 Export MIDI (and, for Ardour, stem) artifacts from each session.
+- [ ] 2.3 Inspect exported artifacts and record which event types and metadata each DAW preserves; confirm the Bitwig notes+velocity-only behavior against the installed version and check whether any newer version restores CC export.
+- [ ] 2.4 Compare exported artifacts against Maybelle runtime needs for clock-following MIDI/CV playback, and note where the two DAWs diverge (the common denominator is notes + velocity).
 
 ## 3. Format Comparison
 

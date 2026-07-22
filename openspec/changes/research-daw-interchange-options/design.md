@@ -2,11 +2,12 @@
 
 Maybelle 314 is planned as a Raspberry Pi 5 stored-sequence MIDI/CV controller. It follows Pamela's Pro Workout as the master clock, receives rack-provided CV runtime parameters, and outputs CV/gates/triggers/modulation through the ES-9. The Pi is not intended to generate rack voices or act as a sampler.
 
-The authoring workflow is expected to happen on a separate computer, with tracks authored first in Ardour and loaded onto the Pi. The unresolved question is whether the runtime should consume Ardour session files directly, consume exported MIDI/stems, consume an open DAW interchange format such as DAWproject, or use a Maybelle-specific song bundle generated from DAW exports. The research must also determine whether that bundle contract can be DAW-agnostic enough to later support Ableton Live, Bitwig Studio, Studio One, Logic Pro, Reaper, and other major DAWs.
+The authoring workflow is expected to happen on a separate computer. Ardour and Bitwig Studio are both supported authoring tools; Bitwig is the current test bench while Ardour support is deliberately retained, so the interchange contract must be validated against both. The unresolved question is whether the runtime should consume DAW session files directly, consume exported MIDI/stems, consume an open DAW interchange format such as DAWproject, or use a Maybelle-specific song bundle generated from DAW exports. The research must also determine whether that bundle contract can be DAW-agnostic enough to later support Ableton Live, Studio One, Logic Pro, Reaper, and other major DAWs.
 
 Initial research suggests:
 - Ardour distributes ready-to-run builds for Linux, macOS, and Windows, but source builds are explicitly described by Ardour as challenging and unsupported by the project for end users. Running Ardour itself on the Pi should therefore be treated as a spike, not an assumption.
 - Ardour stem export is an intentional interchange path. Ardour documents stem export as exporting each track individually while preserving sync, but losing all data except actual audio/MIDI.
+- Bitwig MIDI export is deliberately lean. `File > Export MIDI` exports the whole Arrangement (not the Clip Launcher) as a Type-1 Standard MIDI File containing notes and velocity only; automation, MIDI CC, note expressions/MPE, micro-pitch, sustain (CC64), tempo, and clip-launch data are dropped. This means any modulation authored as Bitwig automation does not survive export, so modulation must be encoded as notes, carried in the song-bundle metadata, or baked into sampler waveforms (see the synced-LFO-sampler-authoring research change). The trigger *timing* of such modulation does survive as a plain note.
 - Ardour audio export supports formats such as BWAV 24-bit, BWAV 32-float, FLAC, MP3, Ogg/Vorbis, and WAV-tagged outputs.
 - DAWproject is an MIT-licensed open exchange format based on ZIP and XML. It covers note data, automation, audio data, tempo, time signature, plug-in state, and track/timeline structure, but it is not currently listed as an Ardour-supported export format.
 - DAWproject is especially relevant to cross-DAW abstraction because Bitwig and Studio One are associated with the format, but DAW support coverage must be verified instead of assumed.
@@ -100,7 +101,8 @@ Rollback is limited to removing this OpenSpec change before implementation.
 
 ## Open Questions
 
-- Can Ardour export the exact MIDI event types Maybelle needs: notes, CC automation, pitch bend, markers, tempo map, time signatures, track names, and channel metadata?
+- Can Ardour export the exact MIDI event types Maybelle needs: notes, CC automation, pitch bend, markers, tempo map, time signatures, track names, and channel metadata? (Bitwig is already known to export notes + velocity only; the parallel Ardour inventory is still open.)
+- Given Bitwig's notes-only export, is the normalized bundle's modulation carried as notes, as bundle metadata, or as baked sampler waveforms — and does the same contract hold for Ardour, which can export richer automation?
 - Which major DAWs can export enough data to produce the normalized Maybelle song bundle without manual reconstruction?
 - Can Ableton Live, Bitwig Studio, Studio One, Logic Pro, Reaper, or other DAWs export markers, tempo maps, track names, MIDI automation, and stems in machine-readable ways?
 - Does Ardour expose enough stable XML/session structure to make direct session inspection useful for authoring-time conversion?
