@@ -23,5 +23,5 @@ Maybelle 314 now has several parallel research tracks, and some of them block ba
 ## Impact
 
 - Adds OpenSpec planning artifacts for research coordination.
-- May guide ordering for `decide-base-platform`, `research-daw-interchange-options`, `investigate-es9-config-profiles`, `investigate-pi-port-topology`, `investigate-agent-control-surface`, `research-open-test-music-fixtures`, and `research-live-trigger-sample-routing`.
+- May guide ordering for `decide-base-platform`, `research-daw-interchange-options`, `investigate-es9-config-profiles`, `investigate-pi-port-topology`, `investigate-agent-control-surface`, `research-open-test-music-fixtures`, `research-live-trigger-sample-routing`, and `research-synced-lfo-sampler-authoring`.
 - No production code, dependencies, hardware integration, or runtime behavior changes are introduced by this proposal.
