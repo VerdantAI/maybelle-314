@@ -26,7 +26,7 @@ The active OpenSpec change is `decide-base-platform`. It exists to decide:
 - ES-9 I/O stack: JACK, PipeWire/JACK, PortAudio/sounddevice, ALSA direct, or another path.
 - Runtime language/framework: Python plus a small local UI, Node/lightweight JavaScript, or Tauri/Rust.
 - Package set with MIT-compatible/permissive licensing.
-- Song bundle and manifest format.
+- Song bundle and manifest format (now specified in `decide-song-bundle-manifest`).
 - Kiosk/display approach for the 5-inch screen.
 
 The current bias is toward a Python-centered runtime with a browser/kiosk UI, but the ES-9 I/O spike is expected to drive the real decision.
@@ -48,5 +48,6 @@ The current bias is toward a Python-centered runtime with a browser/kiosk UI, bu
 
 - `openspec/changes/decide-base-platform/` — active base-platform decision (OS image, ES-9 I/O stack, runtime language, song-bundle format).
 - `openspec/changes/research-daw-interchange-options/` — DAW export/interchange research across Ardour and Bitwig.
+- `openspec/changes/decide-song-bundle-manifest/` — the v1 song-bundle + manifest format (the central data contract binding MIDI to ES-9 output, banks, selection, and modulation).
 - `openspec/changes/research-synced-lfo-sampler-authoring/` — tempo-synced LFO waveform authoring and Assimil8or content tooling research.
 - Additional research spikes live under `openspec/changes/` (ES-9 profiles, Pi port topology, agent control surface, test-music fixtures, research roadmap).

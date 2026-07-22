@@ -1,6 +1,6 @@
 ## Context
 
-Maybelle 314 currently has one base-platform decision change and eleven supporting research tracks. Some research can start immediately with web searches and source review. Other work is blocked on hardware access, bench testing, a DAW host machine, artist/license outreach, or unavailable deferred hardware such as Assimil8or.
+Maybelle 314 currently has one base-platform decision change and eleven supporting research tracks. A separate `decide-song-bundle-manifest` decision consumes several of these research outputs (DAW interchange, ES-9 profiles, synced-LFO, router screen, Performance/Backstage) to define the central data contract; it is a decision artifact rather than a research spike and is not assigned a research priority band. Some research can start immediately with web searches and source review. Other work is blocked on hardware access, bench testing, a DAW host machine, artist/license outreach, or unavailable deferred hardware such as Assimil8or.
 
 The roadmap needs to preserve momentum without pretending all research has the same urgency. The base-platform decision is the architectural center: it should receive early evidence from DAW interchange, Pi/ES-9 port topology, ES-9 profile validation, and package/runtime research. Agent control surface, open test fixtures, and live trigger routing are important, but they mostly refine tooling, testing, and future feature boundaries after the first platform constraints are known.
 
