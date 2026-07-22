@@ -61,6 +61,18 @@ Alternatives considered:
 - UI reads engine state synchronously: simplest wiring, but couples timing to rendering — unacceptable.
 - Log-then-replay activity: fine for review, but not the live "is it firing now" the screen exists for.
 
+Transport: the activity stream uses **Server-Sent Events (SSE)** — a one-way HTTP event stream fitting pure runtime→UI telemetry, with built-in browser support and auto-reconnect; the pipeline is `CV/gate callback → lock-free enqueue → non-realtime publisher coalesces to ~30–60 Hz → SSE → browser rAF-batched SVG update`, with brief events (triggers) held for a minimum visible duration. One SSE stream serves both the local Performance router and a remote Backstage monitor. WebSocket is only warranted if the optional live re-wire adds a client→server command path.
+
+### Optional: guarded live re-wire (drag track→port) — not a v1 requirement
+
+The router MAY optionally allow live re-wiring — dragging a track to an ES-9 output jack to re-assign routing during a set — but this is **explicitly optional and out of v1 scope**, not a requirement. When offered, it is framed as a **performance gesture** (repatching mid-set, like a modular) and gated behind an explicit momentary **"patch" sub-mode**: read-only by default; in patch mode a drag re-assigns live routing with immediate visual confirmation and one-tap undo; persistence to the manifest is explicit (save); exiting returns to the locked read-only router.
+
+Rationale: this reuses the Performance/Backstage blind/edit-mode safety gate rather than adding a new one, so it does not violate the "Performance is a safe surface" principle; SVG bezier "cable" drag-to-connect is an established, touch-viable pattern.
+
+Alternatives considered:
+- Always-on drag re-wire: too easy to mis-tap during a live set — rejected.
+- Never allow it (Backstage only): the current default; the optional gated sub-mode keeps the door open without requiring it.
+
 ### Distinct visual language per signal type, not color-alone
 
 Each output's activity is shown with a representation matched to its signal type — e.g. a gate as a lit/held state, a trigger as a brief pulse/flash, pitch/CV as a level or value, stepped modulation as a discrete value — and always pairs color with motion/shape/label so state is not encoded by color alone.

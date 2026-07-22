@@ -16,7 +16,7 @@ The project SHALL define how the track-to-output mapping is sourced and rendered
 - **WHEN** the research defines the mapping display
 - **THEN** it reads track-to-output associations from the song-bundle manifest / ES-9 profile channel map
 - **AND** it renders them on the corresponding output jacks (with handling for unmapped jacks)
-- **AND** it confirms the router displays mapping only, with routing edits reserved for Backstage
+- **AND** it confirms the router is read-only by default, with routing edits reserved for Backstage — while allowing an OPTIONAL, explicitly-gated live re-wire "patch" sub-mode (not a requirement) that reuses the Performance safety gate
 
 ### Requirement: Live activity model decoupled from timing
 The project SHALL define live per-output activity and its isolation from real-time output timing.
@@ -24,8 +24,8 @@ The project SHALL define live per-output activity and its isolation from real-ti
 #### Scenario: Activity streaming is specified
 - **WHEN** the research defines live activity
 - **THEN** it defines per-output activity for gate on/off, trigger pulses, pitch/CV level, and stepped modulation
-- **AND** it defines a one-way stream from the runtime to the UI sampled at a bounded UI refresh, such that the real-time CV/gate thread never blocks on or is paced by the UI
-- **AND** it selects/compares a stream transport and relates it to the Performance/Backstage client-server model
+- **AND** it defines a one-way stream from the runtime to the UI sampled at a bounded UI refresh (via a non-realtime publisher and rAF-batched rendering), such that the real-time CV/gate thread never blocks on or is paced by the UI
+- **AND** it selects a stream transport (Server-Sent Events) and relates it to the Performance/Backstage client-server model
 
 ### Requirement: Signal-type visual language and portrait layout
 The project SHALL define the router's visual language and its portrait-panel layout.
