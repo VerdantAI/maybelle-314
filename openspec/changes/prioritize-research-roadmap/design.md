@@ -1,6 +1,6 @@
 ## Context
 
-Maybelle 314 currently has one base-platform decision change and eleven supporting research tracks. A separate `decide-song-bundle-manifest` decision consumes several of these research outputs (DAW interchange, ES-9 profiles, synced-LFO, router screen, Performance/Backstage) to define the central data contract; it is a decision artifact rather than a research spike and is not assigned a research priority band. Some research can start immediately with web searches and source review. Other work is blocked on hardware access, bench testing, a DAW host machine, artist/license outreach, or unavailable deferred hardware such as Assimil8or.
+Maybelle 314 currently has one base-platform decision change and twelve supporting research tracks. A separate `decide-song-bundle-manifest` decision consumes several of these research outputs (DAW interchange, ES-9 profiles, synced-LFO, router screen, Performance/Backstage) to define the central data contract; it is a decision artifact rather than a research spike and is not assigned a research priority band. Some research can start immediately with web searches and source review. Other work is blocked on hardware access, bench testing, a DAW host machine, artist/license outreach, or unavailable deferred hardware such as Assimil8or.
 
 The roadmap needs to preserve momentum without pretending all research has the same urgency. The base-platform decision is the architectural center: it should receive early evidence from DAW interchange, Pi/ES-9 port topology, ES-9 profile validation, and package/runtime research. Agent control surface, open test fixtures, and live trigger routing are important, but they mostly refine tooling, testing, and future feature boundaries after the first platform constraints are known.
 
@@ -29,7 +29,7 @@ Research SHALL be grouped into three bands:
 | --- | --- | --- |
 | P0 | Blocks or strongly shapes the base-platform decision | `decide-base-platform`, `research-daw-interchange-options`, `investigate-pi-port-topology`, `investigate-es9-config-profiles` |
 | P1 | Should begin early because it improves validation and tooling, but does not block first hardware/runtime choice | `research-open-test-music-fixtures`, `investigate-agent-control-surface`, `research-touchscreen-emulation-and-ux`, `research-performance-backstage-modes`, `research-performance-router-screen` |
-| P2 | Important product-shape exploration that should not block first stored-sequence controller decisions | `research-live-trigger-sample-routing`, `research-synced-lfo-sampler-authoring`, `research-bluetooth-control-channel` |
+| P2 | Important product-shape exploration that should not block first stored-sequence controller decisions | `research-live-trigger-sample-routing`, `research-synced-lfo-sampler-authoring`, `research-bluetooth-control-channel`, `research-backstage-gear-registry` |
 
 Rationale: the Pi/ES-9/DAW path determines whether the core product can run. Test fixtures and agent tooling accelerate the work once that path is clearer. Live trigger/sample routing can expand the product, but it should not dilute the controller-first platform decision.
 
@@ -57,6 +57,7 @@ Web-first items:
 | `research-performance-backstage-modes` | Yes | edit-vs-perform separation precedents (QLab blind/live, cue-system show/edit modes), single-core/multi-responsive-frontend and kiosk+remote-admin architectures |
 | `research-performance-router-screen` | Yes | ES-9 front-panel layout (official manual), self-drawn SVG asset approach + licensing, live per-output activity-visualization patterns decoupled from timing |
 | `research-bluetooth-control-channel` | Yes | Pi 5 BlueZ/BLE GATT capabilities, BLE event-trigger patterns, BLE throughput for updates, pairing/passkey (PIN) authentication and its weaknesses |
+| `research-backstage-gear-registry` | Yes | ModularGrid API/scraping/export constraints, manual-manuals access + copyright, gear-registry data model |
 
 Rationale: this lets agents make progress immediately and narrows the hardware questions before bench time.
 
@@ -95,7 +96,7 @@ The initial schedule SHALL use four passes:
 | Pass 1: Web triage | Gather public evidence and narrow unknowns | `research-daw-interchange-options`, `investigate-es9-config-profiles`, `investigate-pi-port-topology`, `decide-base-platform` package/license survey | Web/docs/source review |
 | Pass 2: Test and tooling support | Prepare validation inputs and agent workflow assumptions | `research-open-test-music-fixtures`, `investigate-agent-control-surface`, `research-touchscreen-emulation-and-ux`, `research-performance-backstage-modes`, `research-performance-router-screen`, `research-synced-lfo-sampler-authoring` (licensing/format web triage) | Web/docs/source review, license review |
 | Pass 3: Hardware and DAW bench | Validate the architecture-critical assumptions | `investigate-pi-port-topology`, `investigate-es9-config-profiles`, `research-daw-interchange-options`, `research-touchscreen-emulation-and-ux` (panel validation), `decide-base-platform` | Pi 5, ES-9, DAW host, 5-inch panel, MIDI controllers if available |
-| Pass 4: Product expansion research | Explore future live cue/sample/show-control workflows | `research-live-trigger-sample-routing`, `research-synced-lfo-sampler-authoring`, `research-bluetooth-control-channel` | Web/domain research first, later hardware/software integration if prioritized |
+| Pass 4: Product expansion research | Explore future live cue/sample/show-control workflows | `research-live-trigger-sample-routing`, `research-synced-lfo-sampler-authoring`, `research-bluetooth-control-channel`, `research-backstage-gear-registry` | Web/domain research first, later hardware/software integration if prioritized |
 
 Pass 1 should produce enough evidence to decide what must be measured on hardware. Pass 3 should produce enough evidence to finalize or revise the base platform decision.
 
