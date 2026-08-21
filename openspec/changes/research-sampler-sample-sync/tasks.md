@@ -1,3 +1,11 @@
+## 0. Reuse Evaluation (do this first)
+
+- [ ] 0.1 Evaluate **A8Manager** against this change's card-management, validation, and preset-binding requirements; record what it already covers.
+- [ ] 0.2 Resolve A8Manager's blocking questions: its actual license, and whether a Linux build exists or should be contributed upstream.
+- [ ] 0.3 Evaluate **`rclone copy`** (`--checksum`, `--dry-run`, `--max-delete`, `--backup-dir`) against the sync and safety models below; record which requirements it satisfies as-is.
+- [ ] 0.4 Confirm rclone's license and decide whether to depend on it being installed, vendor a binary, or implement the needed subset.
+- [ ] 0.5 Re-scope the sections below to specify only **bundle-to-card reconciliation** — which samples a song needs — and drop anything the two tools already do.
+
 ## 1. Sampler Storage Inventory
 
 - [ ] 1.1 Record the Assimil8or's card media type, required filesystem format, and capacity limits; mark anything not confirmed against the module or its documentation as unverified.
