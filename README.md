@@ -10,13 +10,16 @@ This software is being developed with the active use of coding agents. Agents ar
 
 - Target hardware: Raspberry Pi 5, Expert Sleepers ES-9, official Raspberry Pi Touch Display 2 (5-inch, 720x1280 portrait, DSI, 5-finger capacitive), Eurorack control sources.
 - Master clock: Pamela's Pro Workout. The Pi follows external clock/start/reset signals rather than owning tempo.
-- Authoring workflow: tracks are authored in a DAW on another computer and loaded onto the Pi, likely as song bundles containing MIDI files plus metadata. Ardour and Bitwig Studio are both supported authoring tools; Bitwig is the current test bench while Ardour support is deliberately retained. Bitwig's MIDI export carries notes and velocity only (no automation, CC, or note expressions), which shapes how modulation is authored — see the modulation/LFO approach below.
+- Authoring workflow: **multi-source**. VCV Rack, Bitwig Studio, Ardour, and other tools where practical all feed the same source-agnostic song bundle. **Sequences and CVs are authored in VCV Rack**, which is now the primary test bench; **Bitwig is the default file editor**; Ardour is retained. Adding VCV Rack widens the contract rather than replacing it — the MIDI/SMF path stays fully supported. Bitwig's MIDI export constraint (notes and velocity only, no automation/CC/note expressions) still applies to that path but is no longer the binding constraint on modulation authoring.
+- Capture model: Maybelle stores **canned support tracks** — **signals and sequence, not baked audio**. A baked render is fixed to wall-clock samples and cannot be re-clocked; captured material is therefore positioned in **musical time** (bars/beats/ticks), with the authored BPM carried as reference metadata only. Pamela's Pro Workout governs playback tempo. The open problem is that a `.vcv` patch is a *program*, not a *recording* — see `research-vcv-rack-authoring-path`. Direction is still being iterated.
+- VCV Rack licensing boundary (decided): the project **does not ship, bundle, host, link, or redistribute VCV Rack or any Rack engine**. Users install and run VCV Rack themselves and Maybelle sits strictly downstream. This removes the GPL/commercial licensing hazard, keeps any Rack engine off the Pi, and leaves Maybelle in sole ownership of the ES-9 duplex stream — including the input channels used for rack CV and clock.
+- Sample assets: authored material may reference `.wav` samples played by an on-board sampler in the rack — currently the **Rossum Assimil8or** as the default. The bundle captures each sample's name, location, format, and content identity, and an offline authoring-side tool syncs the sampler's SD card to match. Maybelle emits the gate/trigger and modulation CV through the ES-9; it does not read, serve, or play sample content. See `research-sampler-sample-sync`.
 - Companion content tooling: an offline, authoring-side toolset (separate from the Pi runtime) for creating tempo-synced LFO/modulation waveforms — Adventure Kid AKWF-style single-cycle shapes or multi-bar bounces of DAW automation — and for preparing Rossum Assimil8or presets. The LFO's shape is baked into a waveform stored in the sampler; its trigger timing is authored as a plain note in the MIDI file, which Maybelle emits as a gate/trigger through the ES-9 into the sampler's trig-in. The tooling points to the external A8Manager configurator (credit: Chris Roberts) for hands-on editing and includes a clean-room preset writer for generated content, keeping licensing MIT-compatible.
 - Runtime controls: the rack provides CV inputs for song banks, song selection, channel banks, transport, and related performance parameters.
 - Two operating contexts: **Performance** (at the rack, on the 5-inch touchscreen — glanceable, real-time, robust) and **Backstage** (configuration of triggers, channels, banks, mappings, and calibration, done on a computer/laptop at standard size). Research direction: one shared core with two role-specific responsive views that can run simultaneously (client/server), plus a safety gate so Backstage edits never disrupt live output — not two separate apps and not a single-screen toggle.
 - Selection model: incoming CV is quantized to the number of available choices, similar to Assimil8or-style selection behavior, with debounce/hysteresis/latching to avoid unstable changes.
 - Output model: the Pi outputs pitch CV, gates, triggers, stepped modulation, and other control signals through the ES-9 into the rack.
-- Deferred hardware: Assimil8or runtime/sample playback remains a later spike and is not available for the first platform decision. Authoring-side content tooling for it (LFO waveforms and preset preparation) is now in scope, however, as offline tooling that does not depend on the module being present.
+- Deferred hardware: Assimil8or runtime/sample playback remains a later spike and is not available for the first platform decision. Its storage and WAV format constraints are being pinned down ahead of it by `research-sampler-sample-sync`. Authoring-side content tooling for it (LFO waveforms and preset preparation) is now in scope, however, as offline tooling that does not depend on the module being present.
 
 ## Base Platform Decision
 
@@ -33,7 +36,13 @@ The decision is now recorded in `openspec/changes/decide-base-platform/decision-
 
 ## Open Questions
 
-- What exact event types does each authoring DAW export in the MIDI files we will use? (Known for Bitwig: notes + velocity only, from the Arrangement, as a Type-1 SMF; Ardour still to be inventoried.)
+- How does VCV-authored material get captured as signals and sequence — as MIDI out of VCV Rack, as transcribed `patch.json` sequencer state, as a tempo-relative CV/automation stream, or a hybrid? (The central question of `research-vcv-rack-authoring-path`.)
+- Can MIDI be captured out of VCV Rack at all, and with what fidelity? A positive answer reuses the existing MIDI→CV engine, manifest, and authoring docs unchanged.
+- What representation carries continuous CV in musical time, at what resolution and interpolation — breakpoints, automation segments, a per-beat grid, or stepped events?
+- What does the authored BPM govern? (Confirmed: not playback timing. Open: validation, display, free-running fallback, or all three.) What happens when the rack clock is absent or stops?
+- Is the ES-9 the best vehicle for getting authored triggers/CV/MIDI into the rack, or does the survey of DC-coupled interfaces and MIDI→CV hardware surface a better fit?
+- What are the Assimil8or's actual card, layout, filename, and WAV format constraints?
+- What exact event types does each authoring DAW export in the MIDI files we will use, for the retained SMF path? (Known for Bitwig: notes + velocity only, from the Arrangement, as a Type-1 SMF; Ardour still to be inventoried.)
 - How is a synced-LFO trigger's timing authored and emitted — as a dedicated MIDI note track that Maybelle converts to a gate/trigger through the ES-9 — and how does re-triggering keep the sampler-side LFO phase-locked to Pamela's clock?
 - How will Pamela's clock/start/reset arrive at the ES-9: pulses, gates, divisions, or another signal shape?
 - Which ES-9 input/output API gives stable enough timing on Raspberry Pi OS?
@@ -42,12 +51,16 @@ The decision is now recorded in `openspec/changes/decide-base-platform/decision-
 
 ## Documentation
 
-- `docs/authoring/` — authoring guide for setting up Bitwig/Ardour tracks for the ES-9 via Maybelle, written for both users and assisting agents. Start at `docs/authoring/README.md`. Backstage mode surfaces this same guidance as in-app diagrams.
+- `docs/authoring/` — authoring guide for VCV Rack, Bitwig, and Ardour, written for both users and assisting agents. Start at `docs/authoring/README.md`. Includes `vcv-rack.md` (authoring in VCV Rack and capturing to MIDI via the Chinenual MIDI Recorder) and a sectioned `faq.md`. Backstage mode surfaces this same guidance as in-app diagrams. VCV Rack material is marked **(provisional)** against `research-vcv-rack-authoring-path`.
+
+- `examples/vcv-rack/` — example VCV Rack patches used as test fixtures for the authoring-path research. `prog-riff-v1.vcv` is the first: a 7-step riff at 137 BPM using Impromptu PhraseSeq16, GateSeq64, and Clocked. Its inventory is recorded in `openspec/changes/research-vcv-rack-authoring-path/research-findings.md`.
 
 ## Planning Artifacts
 
-- `openspec/changes/decide-base-platform/` — active base-platform decision (OS image, ES-9 I/O stack, runtime language, song-bundle format).
-- `openspec/changes/research-daw-interchange-options/` — DAW export/interchange research across Ardour and Bitwig.
-- `openspec/changes/decide-song-bundle-manifest/` — the v1 song-bundle + manifest format (the central data contract binding MIDI to ES-9 output, banks, selection, and modulation).
+- `openspec/changes/research-vcv-rack-authoring-path/` — **active**: the path from VCV Rack into Maybelle and onward into the rack — capture paths, musical-time artifacts, the ES-9 and its alternatives, and sample-reference capture. Extends the two changes below rather than replacing them.
+- `openspec/changes/research-sampler-sample-sync/` — **active**: authoring-side syncing of the on-board sampler's SD card (Assimil8or default) with the samples a song bundle references.
+- `openspec/changes/decide-base-platform/` — active base-platform decision (OS image, ES-9 I/O stack, runtime language, song-bundle format). Only the bundle-format point is reopened; the Python core, ES-9 I/O stack, and kiosk/web UI decisions are unaffected.
+- `openspec/changes/research-daw-interchange-options/` — DAW export/interchange research across Ardour and Bitwig. Its source-agnostic-bundle recommendation is now being stress-tested against VCV Rack.
+- `openspec/changes/decide-song-bundle-manifest/` — the v1 song-bundle + manifest format (the central data contract binding authored material to ES-9 output, banks, selection, and modulation). Being extended to carry VCV-sourced material and sample references; the voice/output mapping, banks, selection, and calibration model all still stand.
 - `openspec/changes/research-synced-lfo-sampler-authoring/` — tempo-synced LFO waveform authoring and Assimil8or content tooling research.
 - Additional research spikes live under `openspec/changes/` (ES-9 profiles, Pi port topology, agent control surface, test-music fixtures, research roadmap).
