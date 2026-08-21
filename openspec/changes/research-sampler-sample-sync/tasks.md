@@ -5,8 +5,10 @@
 - [x] 0.3 Evaluate **`rclone copy`** against the sync and safety models below. (**MIT**, and `copy` verbatim "Doesn't delete files from the destination." `--checksum`, `--dry-run`, `--max-delete`, `--backup-dir` cover the specified model. Design validated.)
 - [ ] 0.4 Decide the implementation: rclone-installed vs vendored vs **stdlib** (`hashlib` + `shutil`). Stdlib is a serious contender for copying a few dozen WAVs — a large Go binary may be less small than the code it replaces.
 - [x] 0.5 Re-scope in light of 0.1–0.3. (Sections 1 and 4–5 **stay in scope** — A8Manager's missing license means the Assimil8or's card layout, filename rules, and WAV constraints must be sourced from Rossum documentation and the hardware. Sections 2–3 keep their *requirements* but defer their *implementation* to task 0.4.)
-- [ ] 0.6 Decide whether to ask the A8Manager author to add a license, which is the prerequisite for any deeper reuse or upstream Linux-build contribution.
-- [ ] 0.7 Re-check A8Manager's license periodically; the repository is actively maintained and one may appear.
+- [x] 0.6 Ask the A8Manager author to add a license. (Filed 2026-08-21 as [cpr2323/A8Manager#165](https://github.com/cpr2323/A8Manager/issues/165), requesting MIT or another open-source license.)
+- [ ] 0.7 Track [A8Manager#165](https://github.com/cpr2323/A8Manager/issues/165) for a response.
+- [ ] 0.8 **If #165 resolves with an open-source license**, re-scope this change again: sections 1 and 4–5 may become reuse rather than research, and contributing a Linux build upstream becomes worthwhile.
+- [ ] 0.9 If #165 is declined or goes unanswered, confirm the fallback: source all Assimil8or constraints from Rossum documentation and the hardware, and keep A8Manager as a point-at-only recommendation.
 
 ## 1. Sampler Storage Inventory
 
