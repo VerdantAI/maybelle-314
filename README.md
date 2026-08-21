@@ -2,6 +2,10 @@
 
 Maybelle 314 is a planned Raspberry Pi 5 performance controller for a Eurorack system. It is intended to behave like a classical MIDI/CV controller with stored sequences: it follows the rack clock, reads authored sequence data, and emits control voltage, gates, triggers, and modulation through an Expert Sleepers ES-9. The Pi is not the rack voice and is not a sampler.
 
+## Design Principle: stay small
+
+Maybelle 314 should be **as small as possible**, filling gaps with existing permissively-licensed projects rather than rebuilding them. The burden of proof sits on building: a proposal that specifies implementation work should record what was considered for reuse and why it was rejected. The register of candidates, the admission criteria, and the short list of capabilities that genuinely have no substitute live in `openspec/changes/decide-build-vs-reuse/`.
+
 ## Development Approach
 
 This software is being developed with the active use of coding agents. Agents are used to help research platform choices, maintain OpenSpec planning artifacts, draft implementation work, edit code, run validation commands, and prepare commits. Human review remains part of the workflow, especially for hardware assumptions, music licensing, runtime safety, and production decisions.
@@ -59,6 +63,8 @@ The decision is now recorded in `openspec/changes/decide-base-platform/decision-
 
 - `openspec/changes/research-vcv-rack-authoring-path/` — **active**: the path from VCV Rack into Maybelle and onward into the rack — capture paths, musical-time artifacts, the ES-9 and its alternatives, and sample-reference capture. Extends the two changes below rather than replacing them.
 - `openspec/changes/research-sampler-sample-sync/` — **active**: authoring-side syncing of the on-board sampler's SD card (Assimil8or default) with the samples a song bundle references.
+- `openspec/changes/decide-build-vs-reuse/` — **active**: the reuse-before-build principle, the register of existing projects per capability (A8Manager, rclone, Chinenual, the Python stack), and the irreducible core the project must own.
+- `openspec/changes/research-vcv-rack-companion-module/` — **active**: whether to build and maintain a Maybelle VCV Rack module for song-bundle import/export. Effort, licensing, and distribution researched; leaning toward a Python converter first.
 - `openspec/changes/decide-base-platform/` — active base-platform decision (OS image, ES-9 I/O stack, runtime language, song-bundle format). Only the bundle-format point is reopened; the Python core, ES-9 I/O stack, and kiosk/web UI decisions are unaffected.
 - `openspec/changes/research-daw-interchange-options/` — DAW export/interchange research across Ardour and Bitwig. Its source-agnostic-bundle recommendation is now being stress-tested against VCV Rack.
 - `openspec/changes/decide-song-bundle-manifest/` — the v1 song-bundle + manifest format (the central data contract binding authored material to ES-9 output, banks, selection, and modulation). Being extended to carry VCV-sourced material and sample references; the voice/output mapping, banks, selection, and calibration model all still stand.

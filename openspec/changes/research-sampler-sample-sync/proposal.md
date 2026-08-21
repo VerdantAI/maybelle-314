@@ -9,8 +9,12 @@ This is provisioning, not playback. It runs offline on the authoring machine, it
 ## What Changes
 
 - Add a research spike for **syncing an on-board sampler's storage with the sample assets a song bundle references**, as offline authoring-side tooling separate from the Pi runtime.
+- **Re-scoped by `decide-build-vs-reuse`.** Two existing projects cover much of what this change originally specified, and it should not rebuild either:
+  - **[A8Manager](https://github.com/cpr2323/A8Manager)** — open-source Assimil8or preset *and sample* card manager that scans a card and offers to fix issues. Blocking questions: **no Linux build yet**, and **no license stated** in its README.
+  - **[rclone](https://rclone.org/commands/rclone_copy/)** — `copy` with `--checksum`, `--dry-run`, `--max-delete`, and `--backup-dir` supplies content-hash drift detection, mandatory preview, and additive-by-default semantics. Note `copy`, **not** `sync`, which mirror-deletes.
+  What remains genuinely project-specific is **bundle-to-card reconciliation**: which samples a song needs, resolved to concrete files, with drift reported in the user's terms. That is a file-list producer, not a sync engine.
 - Inventory the **Assimil8or's storage and sample constraints**: card type, format, and capacity; directory and preset layout; filename constraints; supported WAV encodings, bit depths, sample rates, channel counts, and length limits; and how samples bind to banks, presets, and channels.
-- Define the **sync model**: what a sync compares, what it treats as authoritative, and how it detects drift — content hashing, size, and modification metadata — rather than trusting filenames.
+- Define the **sync model**: what a sync compares, what it treats as authoritative, and how it detects drift — content hashing, size, and modification metadata — rather than trusting filenames. Evaluate rclone as the implementation before specifying one.
 - Define the **safety model**, treated as a first-class requirement: dry-run and diff before any write, explicit confirmation for destructive operations, never a blind mirror-delete, verification after write, and safe behavior on interruption or removal mid-write.
 - Define **conversion and validation**: what happens when a referenced sample does not meet the sampler's constraints — reject, warn, or convert — and where any converted artifact is stored so the original is never mutated.
 - Define **name and slot mapping**: how a logical sample reference in the bundle becomes a concrete filename and destination slot, and how collisions and renames are resolved deterministically.
@@ -33,6 +37,7 @@ This is provisioning, not playback. It runs offline on the authoring machine, it
 ## Impact
 
 - Adds OpenSpec planning artifacts for the sampler sample-sync investigation.
+- **Re-scoped by `decide-build-vs-reuse`** against A8Manager and rclone; the sync mechanics and sampler card conventions are candidates for reuse rather than implementation work.
 - Consumes the sample-reference findings from `research-vcv-rack-authoring-path` — logical name, source location, format, and content identity.
 - Complements `research-synced-lfo-sampler-authoring`, which covers waveform generation and preset writing. Generated LFO waveforms are themselves sample assets and should travel through the same sync path rather than a second one.
 - Extends `decide-song-bundle-manifest`: the manifest must express sample references and their sampler destinations.
