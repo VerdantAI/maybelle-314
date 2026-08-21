@@ -9,10 +9,10 @@ This is provisioning, not playback. It runs offline on the authoring machine, it
 ## What Changes
 
 - Add a research spike for **syncing an on-board sampler's storage with the sample assets a song bundle references**, as offline authoring-side tooling separate from the Pi runtime.
-- **Re-scoped by `decide-build-vs-reuse`.** Two existing projects cover much of what this change originally specified, and it should not rebuild either:
-  - **[A8Manager](https://github.com/cpr2323/A8Manager)** — open-source Assimil8or preset *and sample* card manager that scans a card and offers to fix issues. Blocking questions: **no Linux build yet**, and **no license stated** in its README.
-  - **[rclone](https://rclone.org/commands/rclone_copy/)** — `copy` with `--checksum`, `--dry-run`, `--max-delete`, and `--backup-dir` supplies content-hash drift detection, mandatory preview, and additive-by-default semantics. Note `copy`, **not** `sync`, which mirror-deletes.
-  What remains genuinely project-specific is **bundle-to-card reconciliation**: which samples a song needs, resolved to concrete files, with drift reported in the user's terms. That is a file-list producer, not a sync engine.
+- **Re-scoped by `decide-build-vs-reuse` (resolved 2026-08-21).** Two existing projects were evaluated. The outcome is asymmetric:
+  - **[A8Manager](https://github.com/cpr2323/A8Manager)** — does manage Assimil8or presets *and* sample files and scans a card offering fixes, but the repository has **no license at all**: no license field, no `LICENSE`/`COPYING` file. Default copyright applies. Despite secondary sources calling it open source, **it cannot be a project dependency, wrapped, vendored, or invoked as a shipped component.** Pointing users at it for their own hands-on editing remains fine and is unchanged. The missing Linux build is now the *second* problem. **This change must therefore still own the Assimil8or's card and format constraints** — sourced from Rossum's documentation and the hardware, not from an unlicensed codebase.
+  - **[rclone](https://rclone.org/commands/rclone_copy/)** — confirmed **MIT**. `copy` states verbatim that it "Doesn't delete files from the destination," which is exactly the additive-by-default semantics specified here; `--checksum`, `--dry-run`, `--max-delete`, and `--backup-dir` cover the rest. **The design is validated as standard practice.** The implementation is still open: for copying a few dozen WAVs with verification, Python stdlib (`hashlib`, `shutil`) may be smaller than requiring or vendoring a large Go binary. Weigh rclone-installed vs vendored vs stdlib.
+  What remains genuinely project-specific is **bundle-to-card reconciliation**: which samples a song needs, resolved to concrete files, with drift reported in the user's terms.
 - Inventory the **Assimil8or's storage and sample constraints**: card type, format, and capacity; directory and preset layout; filename constraints; supported WAV encodings, bit depths, sample rates, channel counts, and length limits; and how samples bind to banks, presets, and channels.
 - Define the **sync model**: what a sync compares, what it treats as authoritative, and how it detects drift — content hashing, size, and modification metadata — rather than trusting filenames. Evaluate rclone as the implementation before specifying one.
 - Define the **safety model**, treated as a first-class requirement: dry-run and diff before any write, explicit confirmation for destructive operations, never a blind mirror-delete, verification after write, and safe behavior on interruption or removal mid-write.
@@ -37,7 +37,7 @@ This is provisioning, not playback. It runs offline on the authoring machine, it
 ## Impact
 
 - Adds OpenSpec planning artifacts for the sampler sample-sync investigation.
-- **Re-scoped by `decide-build-vs-reuse`** against A8Manager and rclone; the sync mechanics and sampler card conventions are candidates for reuse rather than implementation work.
+- **Re-scoped by `decide-build-vs-reuse`**: the sync *design* is validated against rclone and its implementation left open, while A8Manager's missing license means the Assimil8or card and format constraints stay in scope here rather than being delegated.
 - Consumes the sample-reference findings from `research-vcv-rack-authoring-path` — logical name, source location, format, and content identity.
 - Complements `research-synced-lfo-sampler-authoring`, which covers waveform generation and preset writing. Generated LFO waveforms are themselves sample assets and should travel through the same sync path rather than a second one.
 - Extends `decide-song-bundle-manifest`: the manifest must express sample references and their sampler destinations.

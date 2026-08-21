@@ -15,8 +15,8 @@
 | Local server + SSE | FastAPI + Uvicorn | MIT / BSD | vendored | **Reuse** |
 | Kiosk display | Chromium + labwc | permissive | system | **Reuse** |
 | VCV Rack → MIDI capture | Chinenual MIDI Recorder | GPL-3.0 | **user-installed** | **Reuse** — GPL is fine at this boundary |
-| Assimil8or preset + sample card management | **A8Manager** | **unstated** (JUCE-based) | user-installed | **Reuse-with-gaps** — see below |
-| File sync engine + safety | **rclone `copy`** | MIT (confirm) | separate binary | **Reuse-with-gaps** — see below |
+| Assimil8or preset + sample card management | **A8Manager** | **none — all rights reserved** | user-installed only | **Point-at only** — cannot be a project dependency |
+| File sync engine + safety | **rclone `copy`** | **MIT (confirmed)** | separate binary | **Reuse-eligible** — consumption mode still open |
 | Single-cycle waveforms | AKWF | CC0 | content | **Reuse** |
 | DAW interchange format | DAWproject | MIT | — | **Rejected** — no note-probability field |
 | WAV read/write | soundfile / libsndfile | BSD / LGPL | vendored | **Candidate** — not yet evaluated |
@@ -83,11 +83,54 @@ License consequences differ by how a dependency is consumed:
 
 The project already relies on this: VCV Rack and the GPL-3 Chinenual recorder are acceptable precisely because the user installs them and Maybelle sits downstream. A8Manager would sit in the same category. rclone would be invoked, not linked.
 
+## Resolved 2026-08-21
+
+### A8Manager has no license — this is decisive
+
+Checked the repository directly rather than trusting secondary sources. **GitHub reports the license field as `null`, and there is no `LICENSE`, `LICENCE`, or `COPYING` file anywhere in the repository root** (contents: `.github`, `Source`, `test_data`, `.gitignore`, `A8Manager.jucer`, `README.md`).
+
+Secondary coverage describes A8Manager as "free and open source." **The repository does not support that.** Source being publicly visible is not a license. With no license stated, default copyright applies — all rights reserved — and there is no grant to modify, redistribute, vendor, or build upon it.
+
+Consequences, in order of impact:
+
+1. **It cannot be a project dependency.** Not vendored, not wrapped, not invoked as a shipped component.
+2. **Contributing a Linux build upstream is not the clean option it appeared to be.** A pull request to a repository with no license leaves the contribution's terms undefined for both sides. This would need the author to add a license first — a reasonable thing to ask, and worth asking, but it is a prerequisite rather than a plan.
+3. **Pointing users at it remains completely fine**, which is what `research-synced-lfo-sampler-authoring` and the README already do. A user downloading a freeware tool for their own hardware is their business.
+
+So the Assimil8or card-management gap is **not** closed for Maybelle's toolchain. The still-missing Linux build is now the second problem rather than the first.
+
+The repository is actively maintained (last push April 2026, updated July 2026, 33 open issues), so a license may appear. Re-check before relying on this verdict.
+
+**Practical note:** the Assimil8or's *constraints* — card layout, filename rules, accepted WAV formats — are facts about the hardware, not A8Manager's intellectual property. Source them from Rossum's own documentation and from the module, not by reading an unlicensed codebase.
+
+### rclone is MIT and does exactly what was specified
+
+Confirmed **MIT** via the repository's license field. Extremely healthy: ~59k stars, last pushed 2026-08-20.
+
+`rclone copy` states it verbatim: **"Doesn't delete files from the destination. If you want to also delete files from destination, to make it match source, use the sync command instead."** That is precisely the additive-by-default semantics `research-sampler-sample-sync` specified. `--checksum` checks "for changes with size & checksum"; `--dry-run` performs a trial run; local filesystem paths are supported.
+
+So the design that change specified is standard practice, independently arrived at — which is useful validation regardless of whether rclone is what ultimately implements it.
+
+### But rclone may still be the wrong size for this job
+
+Reuse-before-build is not reuse-at-any-size. The register's own risk section warns that a small app with forty dependencies is not small.
+
+The actual task is copying a few dozen WAV files onto an SD card with content verification. In Python that is roughly a walk, a `hashlib` pass, a compare, a `shutil.copy2`, and a re-hash — stdlib only, no dependency at all. rclone is a cloud-storage tool; requiring users to install a large Go binary, or vendoring one per platform, to copy thirty samples locally is plausibly *less* small than the code it replaces.
+
+The honest verdict is therefore split:
+
+- **The design is validated** — rclone proves the specified model is the standard one, and `copy`-not-`sync` is the correct primitive.
+- **The implementation is still open.** Task 3.4 should weigh rclone-installed against vendored against stdlib, with stdlib a serious contender precisely because it adds nothing.
+
+This is the register working as intended: the research changed the plan, and it did not change it into "add a dependency."
+
 ## Outstanding
 
-- Confirm A8Manager's license from the repository (task 3.1).
-- Determine whether to contribute a Linux build to A8Manager upstream (task 3.2).
-- Confirm rclone's license and decide on installed-vs-vendored (tasks 3.3, 3.4).
+- ~~Confirm A8Manager's license~~ — **done: none.** Re-check periodically in case one is added.
+- Decide whether to **ask the author to add a license**, which is the prerequisite for any deeper reuse or upstream contribution (task 3.2).
+- ~~Confirm rclone's license~~ — **done: MIT.**
+- Decide rclone-installed vs vendored vs stdlib for the reconciliation copy step (task 3.4). Stdlib is a serious contender.
+- Source the Assimil8or's card and WAV constraints from Rossum documentation and the hardware, not from A8Manager's unlicensed source.
 - Search prior art for the CV selection layer and the clock-following scheduler before accepting them as irreducible (tasks 2.6, 2.7).
 
 **Sources:** [A8Manager repo](https://github.com/cpr2323/A8Manager) · [A8Manager site](https://cpr2323.github.io/a8manager/index.html) · [rclone copy](https://rclone.org/commands/rclone_copy/) · [rclone sync](https://rclone.org/commands/rclone_sync/) · [rclone docs](https://rclone.org/docs/) · [Chinenual-VCV](https://github.com/chinenual/Chinenual-VCV)
