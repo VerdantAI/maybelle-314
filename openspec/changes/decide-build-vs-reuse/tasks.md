@@ -18,7 +18,7 @@
 ## 3. Register — Resolve Open Questions
 
 - [x] 3.1 Determine A8Manager's actual license by inspecting the repository rather than the README. (**None.** No license field, no LICENSE/COPYING file. Default copyright — all rights reserved. Cannot be a project dependency; point-at only.)
-- [ ] 3.2 Decide whether to ask the A8Manager author to add a license — the prerequisite for any upstream contribution or deeper reuse. A Linux build contribution to an unlicensed repo leaves terms undefined for both sides.
+- [x] 3.2 Ask the A8Manager author to add a license — the prerequisite for any upstream contribution or deeper reuse. (Filed 2026-08-21 as [cpr2323/A8Manager#165](https://github.com/cpr2323/A8Manager/issues/165). Tracked in the README under "Upstream we are tracking"; revisit the register row if it resolves.)
 - [x] 3.3 Confirm rclone's license and whether invoking it as a separate binary carries any obligation. (**MIT**, confirmed via repository. Invocation carries no obligation. `copy` verbatim "Doesn't delete files from the destination.")
 - [ ] 3.4 Decide rclone-installed vs vendored vs **stdlib**. Note: the job is copying a few dozen WAVs with verification — a walk, `hashlib`, compare, `shutil.copy2`, re-hash. Requiring or vendoring a large Go binary for that may be less small than the code it replaces.
 - [x] 3.5 Determine whether A8Manager's card validation can be invoked rather than reimplemented. (**No** — unlicensed, so not invocable as a shipped component. Source the Assimil8or's card and WAV constraints from Rossum documentation and the hardware instead.)

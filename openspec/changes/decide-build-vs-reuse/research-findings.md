@@ -15,7 +15,7 @@
 | Local server + SSE | FastAPI + Uvicorn | MIT / BSD | vendored | **Reuse** |
 | Kiosk display | Chromium + labwc | permissive | system | **Reuse** |
 | VCV Rack → MIDI capture | Chinenual MIDI Recorder | GPL-3.0 | **user-installed** | **Reuse** — GPL is fine at this boundary |
-| Assimil8or preset + sample card management | **A8Manager** | **none — all rights reserved** | user-installed only | **Point-at only** — cannot be a project dependency |
+| Assimil8or preset + sample card management | **A8Manager** | **none — all rights reserved** ([#165 open](https://github.com/cpr2323/A8Manager/issues/165)) | user-installed only | **Point-at only** — revisit if #165 resolves |
 | File sync engine + safety | **rclone `copy`** | **MIT (confirmed)** | separate binary | **Reuse-eligible** — consumption mode still open |
 | Single-cycle waveforms | AKWF | CC0 | content | **Reuse** |
 | DAW interchange format | DAWproject | MIT | — | **Rejected** — no note-probability field |
@@ -94,7 +94,9 @@ Secondary coverage describes A8Manager as "free and open source." **The reposito
 Consequences, in order of impact:
 
 1. **It cannot be a project dependency.** Not vendored, not wrapped, not invoked as a shipped component.
-2. **Contributing a Linux build upstream is not the clean option it appeared to be.** A pull request to a repository with no license leaves the contribution's terms undefined for both sides. This would need the author to add a license first — a reasonable thing to ask, and worth asking, but it is a prerequisite rather than a plan.
+2. **Contributing a Linux build upstream is not the clean option it appeared to be.** A pull request to a repository with no license leaves the contribution's terms undefined for both sides. This needs the author to add a license first — a prerequisite rather than a plan. **Asked, 2026-08-21: [cpr2323/A8Manager#165](https://github.com/cpr2323/A8Manager/issues/165)**, requesting MIT or another open-source license. Tracked in the README under "Upstream we are tracking."
+
+   **If #165 resolves favourably, this row flips and several downstream verdicts change with it** — `research-sampler-sample-sync` sections 1 and 4–5 could become reuse rather than research, and a Linux build becomes worth contributing. That is a meaningful amount of scope hanging on one upstream answer, which is why it is tracked at the project's front door rather than buried here.
 3. **Pointing users at it remains completely fine**, which is what `research-synced-lfo-sampler-authoring` and the README already do. A user downloading a freeware tool for their own hardware is their business.
 
 So the Assimil8or card-management gap is **not** closed for Maybelle's toolchain. The still-missing Linux build is now the second problem rather than the first.
@@ -126,8 +128,8 @@ This is the register working as intended: the research changed the plan, and it 
 
 ## Outstanding
 
-- ~~Confirm A8Manager's license~~ — **done: none.** Re-check periodically in case one is added.
-- Decide whether to **ask the author to add a license**, which is the prerequisite for any deeper reuse or upstream contribution (task 3.2).
+- ~~Confirm A8Manager's license~~ — **done: none.**
+- ~~Ask the author to add a license~~ — **done: [#165](https://github.com/cpr2323/A8Manager/issues/165), filed 2026-08-21, open.** Track for a response; a favourable answer re-scopes `research-sampler-sample-sync`.
 - ~~Confirm rclone's license~~ — **done: MIT.**
 - Decide rclone-installed vs vendored vs stdlib for the reconciliation copy step (task 3.4). Stdlib is a serious contender.
 - Source the Assimil8or's card and WAV constraints from Rossum documentation and the hardware, not from A8Manager's unlicensed source.
