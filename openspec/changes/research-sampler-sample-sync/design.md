@@ -10,6 +10,20 @@ Two properties shape the whole design. First, this is **provisioning, not playba
 
 Unverified and needing hardware or documentation confirmation: the Assimil8or's card type and filesystem, its directory and preset layout, its filename constraints, and its accepted WAV encodings, bit depths, sample rates, channel counts, and length limits. The Assimil8or runtime spike is deferred, so this research pins down the storage and format facts ahead of it.
 
+### Reuse evaluation outcome (2026-08-21)
+
+`decide-build-vs-reuse` evaluated the two obvious candidates. The results pull in opposite directions and both change this design.
+
+**A8Manager cannot be used.** It is functionally close — it manages Assimil8or presets and sample files, scans a card, and offers to fix what it finds. But the repository carries **no license**: no license field, no `LICENSE` or `COPYING` file. Secondary coverage calling it "open source" is not supported by the repository itself, and public source is not a grant. Default copyright applies, so it cannot be depended on, wrapped, vendored, or invoked as a shipped component. Pointing users at it for their own editing is unaffected and remains fine.
+
+Two consequences for this design: the Assimil8or's card layout, filename rules, and WAV constraints **stay in scope here**, and they must be sourced from Rossum's documentation and the hardware rather than by reading an unlicensed codebase. Those constraints are facts about the module, not anyone's intellectual property.
+
+**rclone validates the design but may be the wrong size.** It is MIT, and `rclone copy` states verbatim that it "Doesn't delete files from the destination" — the additive-by-default semantics specified below, arrived at independently. `--checksum`, `--dry-run`, `--max-delete`, and `--backup-dir` cover the rest of the safety model.
+
+That is useful confirmation that this design is standard rather than idiosyncratic. It is not automatically the implementation. The job here is copying a few dozen WAV files to an SD card with verification — a walk, a `hashlib` pass, a compare, `shutil.copy2`, and a re-hash, all stdlib. Requiring users to install a large Go binary, or vendoring one per platform, may be *less* small than the code it replaces. The decision is deferred to task 0.4 with stdlib a serious contender.
+
+The requirements below are therefore unchanged in substance; what changed is that their implementation is explicitly open, and that A8Manager is not a way out of the card-constraint work.
+
 ## Goals / Non-Goals
 
 **Goals:**

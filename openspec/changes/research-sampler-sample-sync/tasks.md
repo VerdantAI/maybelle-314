@@ -1,14 +1,16 @@
 ## 0. Reuse Evaluation (do this first)
 
-- [ ] 0.1 Evaluate **A8Manager** against this change's card-management, validation, and preset-binding requirements; record what it already covers.
-- [ ] 0.2 Resolve A8Manager's blocking questions: its actual license, and whether a Linux build exists or should be contributed upstream.
-- [ ] 0.3 Evaluate **`rclone copy`** (`--checksum`, `--dry-run`, `--max-delete`, `--backup-dir`) against the sync and safety models below; record which requirements it satisfies as-is.
-- [ ] 0.4 Confirm rclone's license and decide whether to depend on it being installed, vendor a binary, or implement the needed subset.
-- [ ] 0.5 Re-scope the sections below to specify only **bundle-to-card reconciliation** — which samples a song needs — and drop anything the two tools already do.
+- [x] 0.1 Evaluate **A8Manager** against this change's card-management, validation, and preset-binding requirements. (Functionally a strong match — manages presets and samples, scans a card, offers fixes.)
+- [x] 0.2 Resolve A8Manager's blocking questions. (**No license at all** — no license field, no LICENSE/COPYING file. Cannot be a dependency, wrapped, vendored, or invoked as a shipped component. Point-at only. Linux build still absent.)
+- [x] 0.3 Evaluate **`rclone copy`** against the sync and safety models below. (**MIT**, and `copy` verbatim "Doesn't delete files from the destination." `--checksum`, `--dry-run`, `--max-delete`, `--backup-dir` cover the specified model. Design validated.)
+- [ ] 0.4 Decide the implementation: rclone-installed vs vendored vs **stdlib** (`hashlib` + `shutil`). Stdlib is a serious contender for copying a few dozen WAVs — a large Go binary may be less small than the code it replaces.
+- [x] 0.5 Re-scope in light of 0.1–0.3. (Sections 1 and 4–5 **stay in scope** — A8Manager's missing license means the Assimil8or's card layout, filename rules, and WAV constraints must be sourced from Rossum documentation and the hardware. Sections 2–3 keep their *requirements* but defer their *implementation* to task 0.4.)
+- [ ] 0.6 Decide whether to ask the A8Manager author to add a license, which is the prerequisite for any deeper reuse or upstream Linux-build contribution.
+- [ ] 0.7 Re-check A8Manager's license periodically; the repository is actively maintained and one may appear.
 
 ## 1. Sampler Storage Inventory
 
-- [ ] 1.1 Record the Assimil8or's card media type, required filesystem format, and capacity limits; mark anything not confirmed against the module or its documentation as unverified.
+- [ ] 1.1 Record the Assimil8or's card media type, required filesystem format, and capacity limits from **Rossum's own documentation and the hardware** — not from A8Manager's unlicensed source. Mark anything unconfirmed as unverified.
 - [ ] 1.2 Record the on-card directory layout, where preset data lives relative to sample files, and how samples bind to banks, presets, and channels.
 - [ ] 1.3 Record filename constraints: length, permitted characters, and case sensitivity.
 - [ ] 1.4 Record accepted WAV encodings, bit depths, sample rates, channel counts, and length or size limits.

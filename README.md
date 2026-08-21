@@ -6,6 +6,8 @@ Maybelle 314 is a planned Raspberry Pi 5 performance controller for a Eurorack s
 
 Maybelle 314 should be **as small as possible**, filling gaps with existing permissively-licensed projects rather than rebuilding them. The burden of proof sits on building: a proposal that specifies implementation work should record what was considered for reuse and why it was rejected. The register of candidates, the admission criteria, and the short list of capabilities that genuinely have no substitute live in `openspec/changes/decide-build-vs-reuse/`.
 
+Two corollaries the register has already had to apply: **check the license in the repository, not in the write-up** — A8Manager is widely described as open source but carries no license at all, so it cannot be a dependency. And **reuse is not reuse-at-any-size** — a small app with forty dependencies is not small, so a large binary pulled in to do a small job is weighed against the stdlib code it would replace.
+
 ## Development Approach
 
 This software is being developed with the active use of coding agents. Agents are used to help research platform choices, maintain OpenSpec planning artifacts, draft implementation work, edit code, run validation commands, and prepare commits. Human review remains part of the workflow, especially for hardware assumptions, music licensing, runtime safety, and production decisions.
